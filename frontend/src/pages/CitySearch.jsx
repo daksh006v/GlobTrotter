@@ -931,38 +931,6 @@ export default function CitySearch() {
         {/* Discovery Hero Card */}
         <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm">
           <div className="relative z-10 max-w-3xl space-y-4">
-<<<<<<< HEAD
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-primary">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Explore Incredible India</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-              {t("destinationsInIndia")} 🇮🇳
-            </h1>
-
-            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
-              {t("discoverIndiaSub")}
-            </p>
-
-            {/* Global Search Bar */}
-            <div className="relative max-w-xl pt-2">
-              <Search className="w-5 h-5 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <Input
-                placeholder={t("searchDestinationsPlaceholder")}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-11 pr-9 h-12 bg-background/90 text-sm shadow-sm"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-=======
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-medium text-sky-700">
               <Sparkles className="w-3.5 h-3.5 text-sky-500" />
               <span>Explore Top Destinations</span>
@@ -996,7 +964,6 @@ export default function CitySearch() {
                   </button>
                 )}
               </div>
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             </div>
           </div>
         </div>
@@ -1012,35 +979,17 @@ export default function CitySearch() {
               </span>
               {REGIONS.map((region) => {
                 const active = selectedRegion === region;
-                const regionLabel =
-                  region === "All India"
-                    ? t("allIndia")
-                    : region === "North India"
-                    ? t("northIndia")
-                    : region === "West India"
-                    ? t("westIndia")
-                    : region === "South India"
-                    ? t("southIndia")
-                    : region === "East & Northeast"
-                    ? t("eastIndia")
-                    : region === "Central India"
-                    ? t("centralIndia")
-                    : region;
                 return (
                   <button
                     key={region}
                     onClick={() => setSelectedRegion(region)}
-<<<<<<< HEAD
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer ${
-=======
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all shrink-0 cursor-pointer ${
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                       active
                         ? "bg-sky-500 text-white font-medium shadow-xs"
                         : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                     }`}
                   >
-                    {regionLabel}
+                    {region}
                   </button>
                 );
               })}
@@ -1048,15 +997,9 @@ export default function CitySearch() {
 
             {/* Sort Dropdown */}
             <div className="flex items-center gap-2 self-end md:self-auto">
-<<<<<<< HEAD
-              <span className="text-xs text-muted-foreground font-medium flex items-center gap-1">
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                {t("filters")}:
-=======
               <span className="text-xs text-slate-500 font-medium flex items-center gap-1.5">
                 <SlidersHorizontal className="w-4 h-4 text-sky-500" />
                 Sort:
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
               </span>
               <select
                 value={sortBy}
@@ -1082,11 +1025,7 @@ export default function CitySearch() {
                 <button
                   key={vibe}
                   onClick={() => setSelectedVibe(vibe)}
-<<<<<<< HEAD
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-all shrink-0 cursor-pointer ${
-=======
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all shrink-0 cursor-pointer ${
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                     active
                       ? "bg-slate-900 text-white font-medium shadow-xs"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -1099,28 +1038,17 @@ export default function CitySearch() {
           </div>
 
           {/* Row 3: Cost Level Filter */}
-<<<<<<< HEAD
-          <div className="flex items-center gap-2 pt-1 border-t border-border/40 text-xs">
-            <span className="text-muted-foreground font-medium flex items-center gap-1">
-              <IndianRupee className="w-3.5 h-3.5" />
-              {t("budgetPerDay")}:
-=======
           <div className="pt-4 border-t border-slate-100 flex items-center gap-3 text-sm">
             <span className="text-slate-500 font-medium flex items-center gap-1">
               <IndianRupee className="w-4 h-4 text-sky-500" />
               Cost Tier:
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             </span>
             <div className="flex items-center gap-2 overflow-x-auto">
               {COST_FILTERS.map((cost) => (
                 <button
                   key={cost.value}
                   onClick={() => setSelectedCost(cost.value)}
-<<<<<<< HEAD
-                  className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
-=======
                   className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                     selectedCost === cost.value
                       ? "bg-sky-50 text-sky-700 border border-sky-300 font-semibold"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -1135,35 +1063,24 @@ export default function CitySearch() {
 
         {/* Results Header */}
         <div className="flex items-center justify-between">
-<<<<<<< HEAD
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold tracking-tight">{t("destinationsInIndia")}</h2>
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-secondary text-muted-foreground">
-              {filteredCities.length} {t("matchingResults")}
-=======
           <div className="flex items-center gap-2.5">
             <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Available Destinations</h2>
             <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
               {filteredCities.length} {filteredCities.length === 1 ? "City" : "Cities"}
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             </span>
           </div>
 
-          {(searchQuery || selectedRegion !== "All India" || selectedVibe !== "All Vibes" || selectedCost !== "all") && (
+          {(searchQuery || selectedRegion !== "All Regions" || selectedVibe !== "All Vibes" || selectedCost !== "all") && (
             <button
               onClick={() => {
                 setSearchQuery("");
-                setSelectedRegion("All India");
+                setSelectedRegion("All Regions");
                 setSelectedVibe("All Vibes");
                 setSelectedCost("all");
               }}
-<<<<<<< HEAD
-              className="text-xs font-semibold text-primary hover:underline cursor-pointer"
-=======
               className="text-xs font-medium text-sky-600 hover:text-sky-700 hover:underline cursor-pointer"
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             >
-              {t("clearAll")}
+              Clear all filters
             </button>
           )}
         </div>
@@ -1171,8 +1088,8 @@ export default function CitySearch() {
         {/* Loading State */}
         {loading ? (
           <div className="py-16 text-center space-y-3">
-            <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
-            <p className="text-sm text-muted-foreground font-medium">{t("searchDestinationsPlaceholder")}</p>
+            <Loader2 className="w-8 h-8 animate-spin text-sky-500 mx-auto" />
+            <p className="text-sm text-slate-500 font-medium">Finding incredible destinations...</p>
           </div>
         ) : filteredCities.length > 0 ? (
           /* City Grid */
@@ -1182,16 +1099,10 @@ export default function CitySearch() {
               const isWishlisted = wishlist.has(cityKey);
               const isCompared = comparisonList.some((c) => (c.id || c.cityName) === (city.id || city.cityName));
               const costTier = getCostTier(city.costIndex);
-              const displayBudget = `~₹${(city.dailyBudget || 2500).toLocaleString("en-IN")}/day`;
 
               return (
-<<<<<<< HEAD
-                <Card
-                  key={city.id || city.cityName}
-=======
                 <div
-                  key={city.id}
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
+                  key={city.id || city.cityName}
                   onClick={() => setActiveCityDetail(city)}
                   className="group overflow-hidden rounded-3xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between"
                 >
@@ -1209,29 +1120,9 @@ export default function CitySearch() {
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
 
                       {/* Top Badges */}
-<<<<<<< HEAD
-                      <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20">
-                          {city.popularity || 92}% {t("travelerMatch")}
-                        </span>
-
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            onClick={(e) => toggleWishlist(e, city.cityName)}
-                            className={`p-2 rounded-full backdrop-blur-md border transition-all cursor-pointer ${
-                              isWishlisted
-                                ? "bg-rose-500 text-white border-rose-400 scale-110 shadow-xs"
-                                : "bg-black/40 text-white border-white/20 hover:bg-black/60"
-                            }`}
-                            title={isWishlisted ? "Remove from wishlist" : "Save to wishlist"}
-                          >
-                            <Heart className={`w-3.5 h-3.5 ${isWishlisted ? "fill-white" : ""}`} />
-                          </button>
-                        </div>
-=======
                       <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between">
                         <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-black/50 text-white border border-white/20">
-                          {city.popularity}% Match
+                          {city.popularity || 92}% Match
                         </span>
 
                         <button
@@ -1245,7 +1136,6 @@ export default function CitySearch() {
                         >
                           <Heart className={`w-3.5 h-3.5 ${isWishlisted ? "fill-white" : ""}`} />
                         </button>
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                       </div>
 
                       {/* Bottom Banner City Identity */}
@@ -1254,23 +1144,13 @@ export default function CitySearch() {
                           <h3 className="font-semibold text-2xl tracking-tight leading-none">
                             {city.cityName}
                           </h3>
-<<<<<<< HEAD
-                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-md border border-white/20 ${costTier.color}`}>
-                            {displayBudget}
-                          </span>
-                        </div>
-                        <p className="text-xs text-white/80 flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-primary" />
-                          <span>{city.region}, India</span>
-=======
                           <span className={`text-xs font-semibold px-2.5 py-1 rounded-full bg-black/60 border border-white/20 ${costTier.color}`}>
                             ~₹{city.dailyBudget}/day
                           </span>
                         </div>
                         <p className="text-xs text-white/90 flex items-center gap-1">
                           <MapPin className="w-3.5 h-3.5 text-sky-400" />
-                          <span>{city.country} • {city.region}</span>
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
+                          <span>{city.country || "India"} • {city.region}</span>
                         </p>
                       </div>
                     </div>
@@ -1294,31 +1174,16 @@ export default function CitySearch() {
                       </div>
 
                       {/* Landmarks Mini-list */}
-<<<<<<< HEAD
-                      {city.landmarks && city.landmarks.length > 0 && (
-                        <div className="pt-2 border-t border-border/40 text-xs space-y-1">
-                          <span className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider flex items-center gap-1">
-                            <Landmark className="w-3 h-3 text-primary" />
-                            {t("topSights")}:
-                          </span>
-                          <p className="text-xs font-medium text-foreground/90 truncate">
-                            {city.landmarks.join(" • ")}
-                          </p>
-                        </div>
-                      )}
-                    </CardContent>
-=======
                       <div className="pt-2 border-t border-slate-100 text-xs space-y-1">
                         <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider flex items-center gap-1">
                           <Landmark className="w-3.5 h-3.5 text-sky-500" />
                           Iconic Sights:
                         </span>
                         <p className="text-xs font-medium text-slate-800 truncate">
-                          {city.landmarks.join(" • ")}
+                          {city.landmarks?.join(" • ") || "Cultural monuments & heritage sights"}
                         </p>
                       </div>
                     </div>
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                   </div>
 
                   {/* Actions Footer */}
@@ -1327,16 +1192,12 @@ export default function CitySearch() {
                       variant="outline"
                       size="sm"
                       onClick={(e) => toggleCompare(e, city)}
-<<<<<<< HEAD
-                      className={`text-xs gap-1.5 shrink-0 cursor-pointer ${isCompared ? "border-primary text-primary" : ""}`}
-=======
                       className={`text-xs gap-1.5 shrink-0 rounded-lg cursor-pointer ${
                         isCompared ? "border-sky-500 text-sky-600 bg-sky-50" : "border-slate-200 text-slate-700"
                       }`}
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                     >
                       <Scale className="w-3.5 h-3.5" />
-                      <span>{isCompared ? t("comparing") : t("compare")}</span>
+                      <span>{isCompared ? "Comparing" : "Compare"}</span>
                     </Button>
 
                     <Button
@@ -1345,13 +1206,9 @@ export default function CitySearch() {
                         e.stopPropagation();
                         navigate(`/trips/new?name=${encodeURIComponent("Explore " + city.cityName)}&city=${encodeURIComponent(city.cityName)}`);
                       }}
-<<<<<<< HEAD
-                      className="flex-1 text-xs gap-1 cursor-pointer"
-=======
                       className="flex-1 text-xs gap-1 rounded-lg bg-sky-500 hover:bg-sky-600 text-white font-medium cursor-pointer shadow-xs"
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                     >
-                      <span>{t("planTrip")}</span>
+                      <span>Plan Trip</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Button>
                   </div>
@@ -1361,35 +1218,31 @@ export default function CitySearch() {
           </div>
         ) : (
           /* Empty / No Match State */
-          <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center space-y-4 shadow-sm">
+          <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center space-y-4 shadow-sm max-w-2xl mx-auto">
             <div className="w-16 h-16 rounded-full bg-sky-50 text-sky-600 mx-auto flex items-center justify-center">
               <Compass className="w-8 h-8" />
             </div>
-            <div className="max-w-md mx-auto space-y-1.5">
-<<<<<<< HEAD
-              <h3 className="font-bold text-lg">{t("noDestinationsFound")}</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                {t("tryResettingFilters")}
-=======
-              <h3 className="font-semibold text-lg text-slate-900">No destinations match your filters</h3>
-              <p className="text-xs text-slate-500">
+            <div className="space-y-1.5">
+              <h3 className="font-semibold text-xl text-slate-900">No destinations match your filters</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
                 Try widening your cost tier, switching region tabs, or clearing your keyword search.
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
               </p>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedRegion("All India");
-                setSelectedVibe("All Vibes");
-                setSelectedCost("all");
-              }}
-              className="rounded-xl border-slate-200 text-slate-700 font-medium cursor-pointer"
-            >
-              {t("clearAll")}
-            </Button>
+            <div className="pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedRegion("All Regions");
+                  setSelectedVibe("All Vibes");
+                  setSelectedCost("all");
+                }}
+                className="rounded-xl border-slate-200 text-slate-700 font-medium cursor-pointer"
+              >
+                Reset All Filters
+              </Button>
+            </div>
           </div>
         )}
       </main>

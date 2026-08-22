@@ -16,14 +16,11 @@ import {
 import Navbar from "@/components/Navbar";
 import TripCard from "@/components/TripCard";
 import useTripStore from "@/store/tripStore";
-import useLanguageStore from "@/store/languageStore";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export default function MyTrips() {
   const navigate = useNavigate();
   const { trips, fetchTrips, deleteTrip, loading } = useTripStore();
-  const t = useLanguageStore((state) => state.t);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -107,24 +104,6 @@ export default function MyTrips() {
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-<<<<<<< HEAD
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/40 pb-6">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900">
-                {t ? t("myTripsTitle") : "My Trips"}
-              </h1>
-              <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
-                {trips.length} {trips.length === 1 ? "Trip" : "Trips"}
-              </span>
-            </div>
-            <p className="text-xs sm:text-sm text-muted-foreground">
-              {t ? t("myTripsSubtitle") : "Review, edit, and organize all your upcoming and past journeys."}
-            </p>
-          </div>
-
-          <Button onClick={() => navigate("/trips/new")} className="gap-2 shadow-sm font-medium shrink-0 bg-sky-500 hover:bg-sky-600 text-white">
-=======
         {/* Header Strip */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
           <div className="space-y-1">
@@ -145,20 +124,11 @@ export default function MyTrips() {
             onClick={() => navigate("/trips/new")}
             className="h-11 px-5 rounded-full bg-sky-500 hover:bg-sky-600 text-white font-medium text-sm gap-2 shadow-xs cursor-pointer shrink-0"
           >
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             <Plus className="w-4 h-4" />
-            <span>{t ? t("createNewTrip") : "Create New Trip"}</span>
+            <span>Create New Trip</span>
           </Button>
         </div>
 
-<<<<<<< HEAD
-        <div className="space-y-4">
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-            <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
-              <Input
-                placeholder={t ? t("searchTripsPlaceholder") : "Search trips by name or keyword..."}
-=======
         {/* Search, Filter Tabs & Sort Controls */}
         <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-4">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
@@ -168,7 +138,6 @@ export default function MyTrips() {
               <input
                 type="text"
                 placeholder="Search trips by name or keyword..."
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-9 h-11 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition-all"
@@ -183,16 +152,11 @@ export default function MyTrips() {
               )}
             </div>
 
+            {/* Sort Dropdown */}
             <div className="flex items-center gap-2">
-<<<<<<< HEAD
-              <span className="text-xs text-muted-foreground font-medium flex items-center gap-1">
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                {t ? t("filters") : "Sort"}:
-=======
               <span className="text-xs text-slate-500 font-medium flex items-center gap-1.5">
                 <SlidersHorizontal className="w-4 h-4 text-sky-500" />
                 Sort:
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
               </span>
               <select
                 value={sortBy}
@@ -207,47 +171,31 @@ export default function MyTrips() {
             </div>
           </div>
 
-<<<<<<< HEAD
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-=======
           {/* Status Tabs */}
           <div className="flex items-center gap-2 overflow-x-auto pt-1 border-t border-slate-100">
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             {[
-              { id: "all", label: t ? t("allStatus") : "All Itineraries", count: counts.all },
-              { id: "upcoming", label: t ? t("planned") : "Upcoming", count: counts.upcoming },
-              { id: "inprogress", label: t ? t("ongoing") : "In Progress", count: counts.inprogress },
-              { id: "completed", label: t ? t("completed") : "Past Journeys", count: counts.completed },
+              { id: "all", label: "All Itineraries", count: counts.all },
+              { id: "upcoming", label: "Upcoming", count: counts.upcoming },
+              { id: "inprogress", label: "In Progress", count: counts.inprogress },
+              { id: "completed", label: "Past Journeys", count: counts.completed },
             ].map((tab) => {
               const active = statusFilter === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setStatusFilter(tab.id)}
-<<<<<<< HEAD
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer ${
-                    active
-                      ? "bg-sky-500 text-white font-medium shadow-xs"
-                      : "bg-secondary/60 text-muted-foreground hover:bg-secondary hover:text-foreground"
-=======
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer ${
                     active
                       ? "bg-sky-500 text-white font-medium shadow-xs"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                   }`}
                 >
                   <span>{tab.label}</span>
                   <span
                     className={`text-[10px] px-2 py-0.5 rounded-full ${
                       active
-<<<<<<< HEAD
-                        ? "bg-white/20 text-white"
-                        : "bg-background/80 text-muted-foreground"
-=======
                         ? "bg-white/20 text-white font-semibold"
                         : "bg-white text-slate-600 border border-slate-200"
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                     }`}
                   >
                     {tab.count}
@@ -258,6 +206,7 @@ export default function MyTrips() {
           </div>
         </div>
 
+        {/* Trips Grid View */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((n) => (
@@ -277,15 +226,6 @@ export default function MyTrips() {
             ))}
           </div>
         ) : (
-<<<<<<< HEAD
-          <Card className="border-dashed border-2 border-border/80 bg-card/40 p-12 text-center space-y-4">
-            <div className="w-16 h-16 rounded-full bg-sky-50 text-sky-600 mx-auto flex items-center justify-center">
-              <Plane className="w-8 h-8" />
-            </div>
-
-            <div className="max-w-md mx-auto space-y-1.5">
-              <h3 className="font-semibold text-lg text-slate-900">
-=======
           /* Empty State */
           <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center space-y-4 shadow-sm max-w-2xl mx-auto">
             <div className="w-16 h-16 rounded-full bg-sky-50 text-sky-600 mx-auto flex items-center justify-center">
@@ -294,7 +234,6 @@ export default function MyTrips() {
 
             <div className="space-y-1.5">
               <h3 className="font-semibold text-xl text-slate-900">
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                 {searchQuery || statusFilter !== "all" ? "No matching trips found" : "No trips created yet"}
               </h3>
               <p className="text-sm text-slate-500 leading-relaxed">
@@ -304,26 +243,6 @@ export default function MyTrips() {
               </p>
             </div>
 
-<<<<<<< HEAD
-            {searchQuery || statusFilter !== "all" ? (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  setSearchQuery("");
-                  setStatusFilter("all");
-                }}
-              >
-                Reset Filters
-              </Button>
-            ) : (
-              <Button onClick={() => navigate("/trips/new")} className="gap-2 font-medium bg-sky-500 hover:bg-sky-600 text-white">
-                <Plus className="w-4 h-4" />
-                Create Your First Trip
-              </Button>
-            )}
-          </Card>
-=======
             <div className="pt-2">
               {searchQuery || statusFilter !== "all" ? (
                 <Button
@@ -348,10 +267,10 @@ export default function MyTrips() {
               )}
             </div>
           </div>
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
         )}
       </main>
 
+      {/* Delete Confirmation Modal */}
       {tripToDelete && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-0 duration-200">
           <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5">
@@ -360,13 +279,8 @@ export default function MyTrips() {
                 <AlertTriangle className="w-5 h-5 text-red-600" />
               </div>
               <div>
-<<<<<<< HEAD
-                <h3 className="font-semibold text-lg text-foreground">Delete Trip</h3>
-                <p className="text-xs text-muted-foreground">This action cannot be undone</p>
-=======
                 <h3 className="font-semibold text-lg text-slate-900">Delete Trip</h3>
                 <p className="text-xs text-slate-500">This action cannot be undone</p>
->>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
               </div>
             </div>
 
