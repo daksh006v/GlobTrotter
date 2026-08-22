@@ -16,6 +16,7 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import Navbar from "@/components/Navbar";
 import useAuthStore from "@/store/authStore";
+import useTripStore from "@/store/tripStore";
 import { Button } from "@/components/ui/button";
 import SelectDropdown from "@/components/ui/SelectDropdown";
 
