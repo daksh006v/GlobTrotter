@@ -165,7 +165,7 @@ export default function PublicShare() {
 
       <main className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-24">
         {/* Trip Banner */}
-        <div className="rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-xs">
+        <div className="subtle-card rounded-3xl overflow-hidden">
           {trip.coverPhoto ? (
             <div className="relative h-64 sm:h-80 w-full overflow-hidden bg-slate-900">
               <img src={trip.coverPhoto} alt={trip.name} className="w-full h-full object-cover" />
@@ -238,7 +238,7 @@ export default function PublicShare() {
             {stops.map((stop, stopIdx) => {
               const days = getStopDays(stop);
               return (
-                <div key={stop.id || stopIdx} className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
+                <div key={stop.id || stopIdx} className="subtle-card rounded-3xl p-6 sm:p-8 space-y-6">
                   {/* Stop Header */}
                   <div className="flex items-center gap-3.5 border-b border-slate-100 pb-5">
                     <div className="w-11 h-11 rounded-2xl bg-sky-500 text-white flex items-center justify-center font-semibold text-base shrink-0 shadow-xs">

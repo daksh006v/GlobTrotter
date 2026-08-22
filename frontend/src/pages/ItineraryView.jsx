@@ -140,7 +140,7 @@ export default function ItineraryView() {
         </div>
 
         {/* ── Trip Hero Banner ─────────────────────────────── */}
-        <div className="rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-xs">
+        <div className="subtle-card rounded-3xl overflow-hidden">
           {currentTrip.coverPhoto ? (
             <div className="relative h-64 sm:h-80 w-full overflow-hidden bg-slate-900">
               <img
@@ -239,7 +239,7 @@ export default function ItineraryView() {
               {stops.map((stop, stopIdx) => {
                 const days = getStopDays(stop);
                 return (
-                  <div key={stop.id || stopIdx} className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
+                  <div key={stop.id || stopIdx} className="subtle-card rounded-3xl p-6 sm:p-8 space-y-6">
                     {/* Stop Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
                       <div className="flex items-center gap-3.5">

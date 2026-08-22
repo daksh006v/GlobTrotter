@@ -17,6 +17,14 @@ import Navbar from "@/components/Navbar";
 import TripCard from "@/components/TripCard";
 import useTripStore from "@/store/tripStore";
 import { Button } from "@/components/ui/button";
+import SelectDropdown from "@/components/ui/SelectDropdown";
+
+const TRIP_SORT_OPTIONS = [
+  { value: "departure-asc", label: "Departure Date (Earliest First)" },
+  { value: "departure-desc", label: "Departure Date (Latest First)" },
+  { value: "created-desc", label: "Recently Created" },
+  { value: "stops-desc", label: "Most Stops" },
+];
 
 export default function MyTrips() {
   const navigate = useNavigate();
@@ -130,7 +138,7 @@ export default function MyTrips() {
         </div>
 
         {/* Search, Filter Tabs & Sort Controls */}
-        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-4">
+        <div className="subtle-card p-5 rounded-2xl space-y-4">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
             {/* Search Input */}
             <div className="relative flex-1 max-w-md">
@@ -158,16 +166,13 @@ export default function MyTrips() {
                 <SlidersHorizontal className="w-4 h-4 text-sky-500" />
                 Sort:
               </span>
-              <select
+              <SelectDropdown
+                options={TRIP_SORT_OPTIONS}
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 cursor-pointer"
-              >
-                <option value="departure-asc">Departure Date (Earliest First)</option>
-                <option value="departure-desc">Departure Date (Latest First)</option>
-                <option value="created-desc">Recently Created</option>
-                <option value="stops-desc">Most Stops</option>
-              </select>
+                onChange={setSortBy}
+                className="h-11 px-3.5 rounded-xl border-slate-200"
+                align="right"
+              />
             </div>
           </div>
 

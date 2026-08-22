@@ -220,7 +220,7 @@ export default function ItineraryBuilder() {
           )}
 
           {stops.map((stop, idx) => (
-            <div key={stop.id} className="rounded-3xl border border-slate-200 bg-white overflow-hidden shadow-xs hover:border-slate-300 transition-all">
+            <div key={stop.id} className="subtle-card rounded-3xl overflow-hidden">
               {/* Stop Header */}
               <div
                 onClick={() => toggleStop(stop.id)}

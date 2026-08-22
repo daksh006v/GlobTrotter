@@ -16,8 +16,16 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import Navbar from "@/components/Navbar";
 import useAuthStore from "@/store/authStore";
-import useTripStore from "@/store/tripStore";
 import { Button } from "@/components/ui/button";
+import SelectDropdown from "@/components/ui/SelectDropdown";
+
+const VIBE_OPTIONS = [
+  { value: "All", label: "All Experiences" },
+  { value: "Heritage", label: "Palaces & Forts" },
+  { value: "Beach", label: "Beaches & Coastal" },
+  { value: "Mountains", label: "Himalayas & Trek" },
+  { value: "Backwaters", label: "Backwaters & Nature" },
+];
 
 /* ── Hero Slides with Verified Authentic Indian Destinations ─── */
 const HERO_SLIDES = [
@@ -330,17 +338,13 @@ export default function Dashboard() {
               <label className="text-[11px] font-medium text-slate-500 uppercase tracking-wider block">Holiday Vibe</label>
               <div className="flex items-center gap-2">
                 <Compass className="w-4 h-4 text-sky-500 shrink-0" />
-                <select
+                <SelectDropdown
+                  options={VIBE_OPTIONS}
                   value={selectedVibe}
-                  onChange={(e) => setSelectedVibe(e.target.value)}
-                  className="w-full text-sm font-medium text-slate-800 bg-transparent border-none outline-none cursor-pointer p-0"
-                >
-                  <option value="All">All Experiences</option>
-                  <option value="Heritage">Palaces & Forts</option>
-                  <option value="Beach">Beaches & Coastal</option>
-                  <option value="Mountains">Himalayas & Trek</option>
-                  <option value="Backwaters">Backwaters & Nature</option>
-                </select>
+                  onChange={setSelectedVibe}
+                  className="w-full border-none shadow-none p-0 text-sm font-medium text-slate-800 bg-transparent hover:bg-transparent h-auto"
+                  align="left"
+                />
               </div>
             </div>
 
@@ -378,13 +382,13 @@ export default function Dashboard() {
             ].map((stat) => {
               const Icon = stat.icon;
               return (
-                <div key={stat.label} className="rounded-2xl bg-white border border-slate-200 p-5 flex items-center gap-4 shadow-xs">
-                  <div className="w-11 h-11 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+                <div key={stat.label} className="subtle-card rounded-2xl p-5 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shrink-0">
                     <Icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">{stat.label}</p>
-                    <h3 className="text-2xl font-semibold text-slate-900 mt-0.5">{loading ? "–" : stat.value}</h3>
+                    <p className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">{stat.label}</p>
+                    <h3 className="text-2xl font-bold text-slate-900 mt-0.5">{loading ? "–" : stat.value}</h3>
                   </div>
                 </div>
               );
@@ -409,7 +413,7 @@ export default function Dashboard() {
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1, 2, 3].map((n) => (
-                  <div key={n} className="animate-pulse rounded-3xl bg-white border border-slate-200 h-64" />
+                  <div key={n} className="animate-pulse subtle-card rounded-3xl h-64" />
                 ))}
               </div>
             ) : safeTrips.length > 0 ? (
@@ -419,7 +423,7 @@ export default function Dashboard() {
                   return (
                     <div
                       key={trip.id}
-                      className="rounded-3xl overflow-hidden bg-white border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200 flex flex-col group"
+                      className="subtle-card rounded-3xl overflow-hidden flex flex-col group"
                     >
                       <div className="relative h-44 w-full overflow-hidden bg-slate-100">
                         <img
@@ -511,7 +515,7 @@ export default function Dashboard() {
               {POPULAR_DESTINATIONS.map((dest) => (
                 <div
                   key={dest.name}
-                  className="group rounded-3xl overflow-hidden border border-slate-200 bg-white hover:border-slate-300 hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between"
+                  className="subtle-card group rounded-3xl overflow-hidden cursor-pointer flex flex-col justify-between"
                   onClick={() =>
                     navigate(`/trips/new?name=${encodeURIComponent(dest.name + " Gateway")}&city=${encodeURIComponent(dest.name)}`)
                   }

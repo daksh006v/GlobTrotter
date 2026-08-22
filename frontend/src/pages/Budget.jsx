@@ -141,7 +141,7 @@ export default function Budget() {
         </div>
 
         {/* Chart Card */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
+        <div className="subtle-card rounded-3xl p-6 sm:p-8">
           <BudgetChart
             byCategory={budget.byCategory}
             byDay={budget.byDay}
@@ -151,7 +151,7 @@ export default function Budget() {
         </div>
 
         {/* Category Breakdown Table */}
-        <div className="rounded-3xl border border-slate-200 bg-white overflow-hidden shadow-xs">
+        <div className="subtle-card rounded-3xl overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-100">
             <h2 className="font-semibold text-base text-slate-900">Category Breakdown</h2>
           </div>
@@ -177,7 +177,7 @@ export default function Budget() {
 
 function SummaryCard({ icon: Icon, label, value, color }) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-xs flex flex-col justify-between">
+    <div className="subtle-card rounded-3xl p-5 flex flex-col justify-between">
       <div className={`w-10 h-10 rounded-2xl flex items-center justify-center mb-3 ${color}`}>
         <Icon className="w-5 h-5" />
       </div>

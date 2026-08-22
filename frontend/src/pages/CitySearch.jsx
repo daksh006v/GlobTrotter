@@ -26,10 +26,17 @@ import {
 import Navbar from "@/components/Navbar";
 import useAuthStore from "@/store/authStore";
 import useLanguageStore from "@/store/languageStore";
-import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import SelectDropdown from "@/components/ui/SelectDropdown";
+
+const SORT_OPTIONS = [
+  { value: "popularity", label: "Popularity (High to Low)" },
+  { value: "cost-asc", label: "Daily Cost (Budget First)" },
+  { value: "cost-desc", label: "Daily Cost (Luxury First)" },
+  { value: "name", label: "City Name (A-Z)" },
+];
 
 // Comprehensive Indian Destinations Knowledgebase
 const INDIAN_CITIES_KNOWLEDGEBASE = {
@@ -929,7 +936,7 @@ export default function CitySearch() {
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Discovery Hero Card */}
-        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm">
+        <div className="subtle-card relative overflow-hidden rounded-3xl p-6 sm:p-10">
           <div className="relative z-10 max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-medium text-sky-700">
               <Sparkles className="w-3.5 h-3.5 text-sky-500" />
@@ -969,7 +976,7 @@ export default function CitySearch() {
         </div>
 
         {/* Filter Controls Toolbar */}
-        <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-5">
+        <div className="subtle-card p-6 rounded-3xl space-y-5">
           {/* Row 1: Region Tabs & Sort */}
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
             {/* Region Tabs */}
@@ -1001,16 +1008,13 @@ export default function CitySearch() {
                 <SlidersHorizontal className="w-4 h-4 text-sky-500" />
                 Sort:
               </span>
-              <select
+              <SelectDropdown
+                options={SORT_OPTIONS}
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="h-10 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 cursor-pointer"
-              >
-                <option value="popularity">Popularity (High to Low)</option>
-                <option value="cost-asc">Daily Cost (Budget First)</option>
-                <option value="cost-desc">Daily Cost (Luxury First)</option>
-                <option value="name">City Name (A-Z)</option>
-              </select>
+                onChange={setSortBy}
+                className="h-10 px-3.5 rounded-xl border-slate-200"
+                align="right"
+              />
             </div>
           </div>
 
@@ -1104,11 +1108,11 @@ export default function CitySearch() {
                 <div
                   key={city.id || city.cityName}
                   onClick={() => setActiveCityDetail(city)}
-                  className="group overflow-hidden rounded-3xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between"
+                  className="subtle-card group overflow-hidden rounded-3xl cursor-pointer flex flex-col justify-between"
                 >
                   <div>
                     {/* Cover Banner */}
-                    <div className="relative h-56 w-full overflow-hidden bg-slate-100">
+                    <div className="relative h-56 w-full overflow-hidden bg-slate-900">
                       <img
                         src={city.image}
                         alt={city.cityName}
@@ -1117,11 +1121,11 @@ export default function CitySearch() {
                           e.target.src = "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=800&auto=format&fit=crop&q=80";
                         }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
 
                       {/* Top Badges */}
                       <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between">
-                        <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-black/50 text-white border border-white/20">
+                        <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-black/60 text-white border border-white/20">
                           {city.popularity || 92}% Match
                         </span>
 
@@ -1130,7 +1134,7 @@ export default function CitySearch() {
                           className={`p-2 rounded-full border transition-all cursor-pointer ${
                             isWishlisted
                               ? "bg-rose-500 text-white border-rose-400 scale-110 shadow-xs"
-                              : "bg-black/50 text-white border-white/20 hover:bg-black/70"
+                              : "bg-black/60 text-white border-white/20 hover:bg-black/80"
                           }`}
                           title={isWishlisted ? "Remove from wishlist" : "Save to wishlist"}
                         >
@@ -1141,14 +1145,14 @@ export default function CitySearch() {
                       {/* Bottom Banner City Identity */}
                       <div className="absolute bottom-3.5 left-3.5 right-3.5 text-white space-y-1">
                         <div className="flex items-center justify-between">
-                          <h3 className="font-semibold text-2xl tracking-tight leading-none">
+                          <h3 className="font-semibold text-2xl tracking-tight leading-none text-white drop-shadow-md">
                             {city.cityName}
                           </h3>
-                          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full bg-black/60 border border-white/20 ${costTier.color}`}>
+                          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full bg-black/70 border border-white/20 ${costTier.color}`}>
                             ~₹{city.dailyBudget}/day
                           </span>
                         </div>
-                        <p className="text-xs text-white/90 flex items-center gap-1">
+                        <p className="text-xs text-white/95 font-medium flex items-center gap-1">
                           <MapPin className="w-3.5 h-3.5 text-sky-400" />
                           <span>{city.country || "India"} • {city.region}</span>
                         </p>

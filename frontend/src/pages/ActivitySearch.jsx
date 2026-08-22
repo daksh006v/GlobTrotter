@@ -62,7 +62,7 @@ export default function ActivitySearch() {
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-24">
         {/* Header Banner */}
-        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm">
+        <div className="subtle-card relative overflow-hidden rounded-3xl p-6 sm:p-10">
           <div className="relative z-10 max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-medium text-sky-700">
               <Sparkles className="w-3.5 h-3.5 text-sky-500" />
@@ -103,7 +103,7 @@ export default function ActivitySearch() {
         </div>
 
         {/* Quick Destination Pills */}
-        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-4">
+        <div className="subtle-card p-5 rounded-2xl space-y-4">
           <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
             <span className="text-slate-400 font-semibold uppercase tracking-wider shrink-0 mr-1">Popular Cities:</span>
             {POPULAR_DESTINATIONS.map((c) => (
@@ -173,7 +173,7 @@ export default function ActivitySearch() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
             {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div key={n} className="rounded-3xl border border-slate-200 bg-white p-4 space-y-3 animate-pulse h-80" />
+              <div key={n} className="subtle-card rounded-3xl p-4 space-y-3 animate-pulse h-80" />
             ))}
           </div>
         ) : error ? (
@@ -196,7 +196,7 @@ export default function ActivitySearch() {
             {activities.map((act, index) => (
               <div
                 key={act.name + index}
-                className="rounded-3xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-lg transition-all duration-200 overflow-hidden flex flex-col justify-between group"
+                className="subtle-card group rounded-3xl overflow-hidden flex flex-col justify-between"
               >
                 <div>
                   <div className="relative h-52 w-full overflow-hidden bg-slate-100">

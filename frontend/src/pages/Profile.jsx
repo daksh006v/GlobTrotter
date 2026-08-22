@@ -32,6 +32,12 @@ import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import SelectDropdown from "@/components/ui/SelectDropdown";
+
+const LANGUAGE_OPTIONS = LANGUAGES_LIST.map((lang) => ({
+  value: lang.code,
+  label: `${lang.name} (${lang.nativeName || lang.name})`,
+}));
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -237,7 +243,7 @@ export default function Profile() {
         {/* Profile Card & Edit Form */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* User Quick Info Summary */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xs flex flex-col items-center text-center space-y-4 h-fit">
+          <div className="subtle-card rounded-3xl p-6 flex flex-col items-center text-center space-y-4 h-fit">
             {/* Avatar with Upload Badge */}
             <div className="relative group">
               <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-sky-200 bg-slate-100 shadow-sm flex items-center justify-center">
@@ -287,7 +293,7 @@ export default function Profile() {
           </div>
 
           {/* Profile Form */}
-          <div className="lg:col-span-2 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="lg:col-span-2 subtle-card rounded-3xl p-6 sm:p-8 space-y-6">
             <div className="border-b border-slate-100 pb-4">
               <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
                 <User className="w-5 h-5 text-sky-500" />
@@ -330,17 +336,13 @@ export default function Profile() {
                   <Languages className="w-3.5 h-3.5 text-sky-500" />
                   {t ? t("preferredLanguage") : "Preferred Language"}
                 </Label>
-                <select
-                  id="language"
-                  {...register("language")}
-                  className="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-800 outline-none focus:ring-2 focus:ring-sky-500 cursor-pointer"
-                >
-                  {LANGUAGES_LIST.map((lang) => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.name}
-                    </option>
-                  ))}
-                </select>
+                <SelectDropdown
+                  options={LANGUAGE_OPTIONS}
+                  value={watch("language")}
+                  onChange={(val) => setValue("language", val, { shouldValidate: true })}
+                  className="w-full h-11 rounded-xl bg-slate-50 border-slate-200 text-slate-800"
+                  align="left"
+                />
               </div>
 
               {/* Photo URL */}
@@ -378,7 +380,7 @@ export default function Profile() {
         </div>
 
         {/* Saved Wishlist Destinations */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
+        <div className="subtle-card rounded-3xl p-6 sm:p-8 space-y-6">
           <div className="border-b border-slate-100 pb-4">
             <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-sky-500" />

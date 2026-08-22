@@ -204,8 +204,8 @@ function SortableStop({ stop, index, expanded, onToggle, formatDate, sensors, on
     <div
       ref={setNodeRef}
       style={style}
-      className={`rounded-3xl border bg-white overflow-hidden shadow-xs transition-all ${
-        isDragging ? "shadow-xl ring-2 ring-sky-500 border-sky-500" : "border-slate-200"
+      className={`subtle-card rounded-3xl overflow-hidden transition-all ${
+        isDragging ? "shadow-2xl ring-2 ring-sky-500 border-sky-500 scale-[1.02]" : ""
       }`}
     >
       {/* Stop Header */}
