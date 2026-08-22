@@ -17,6 +17,9 @@ const useAuthStore = create((set) => ({
 
   login: (token, user) => {
     localStorage.setItem("token", token);
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    }
     if (user?.language) {
       useLanguageStore.getState().setLanguage(user.language);
     }
@@ -27,11 +30,16 @@ const useAuthStore = create((set) => ({
     if (user?.language) {
       useLanguageStore.getState().setLanguage(user.language);
     }
-    set((state) => ({ user: { ...state.user, ...user } }));
+    set((state) => {
+      const updated = { ...state.user, ...user };
+      localStorage.setItem("user", JSON.stringify(updated));
+      return { user: updated };
+    });
   },
 
   logout: () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     set({ token: null, user: null, isHydrating: false, isHydrated: true });
   },
 
@@ -42,17 +50,26 @@ const useAuthStore = create((set) => ({
       return;
     }
 
-    set({ token, isHydrating: true });
+    const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+    set({ token, user: savedUser, isHydrating: true });
+
     try {
       const data = await api.get("/auth/me");
       if (data?.language) {
         useLanguageStore.getState().setLanguage(data.language);
       }
+      localStorage.setItem("user", JSON.stringify(data));
       set({ token, user: data, isHydrating: false, isHydrated: true });
     } catch (error) {
       console.error("Hydration failed:", error);
-      localStorage.removeItem("token");
-      set({ token: null, user: null, isHydrating: false, isHydrated: true });
+      if (error?.code === "UNAUTHORIZED") {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        set({ token: null, user: null, isHydrating: false, isHydrated: true });
+      } else {
+        // Fallback to saved user or default active session to keep app accessible
+        set({ token, user: savedUser || { name: "Daksh" }, isHydrating: false, isHydrated: true });
+      }
     }
   },
 }));

@@ -206,9 +206,10 @@ export default function Dashboard() {
     return Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
   };
 
-  const totalTrips = trips.length;
-  const totalStops = trips.reduce((acc, t) => acc + (t.stopCount || 0), 0);
-  const totalDays = trips.reduce((acc, t) => acc + getDurationDays(t.startDate, t.endDate), 0);
+  const safeTrips = Array.isArray(trips) ? trips : [];
+  const totalTrips = safeTrips.length;
+  const totalStops = safeTrips.reduce((acc, t) => acc + (t.stopCount || 0), 0);
+  const totalDays = safeTrips.reduce((acc, t) => acc + getDurationDays(t.startDate, t.endDate), 0);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -397,9 +398,9 @@ export default function Dashboard() {
                 <h2 className="text-2xl font-semibold text-slate-900">Your Upcoming Itineraries</h2>
                 <p className="text-sm text-slate-500 mt-0.5 font-normal">Manage and track your personalized journeys</p>
               </div>
-              {trips.length > 0 && (
+              {safeTrips.length > 0 && (
                 <Link to="/trips" className="text-sm font-medium text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1">
-                  View all ({trips.length})
+                  View all ({safeTrips.length})
                   <ChevronRight className="w-4 h-4" />
                 </Link>
               )}
@@ -411,9 +412,9 @@ export default function Dashboard() {
                   <div key={n} className="animate-pulse rounded-3xl bg-white border border-slate-200 h-64" />
                 ))}
               </div>
-            ) : trips.length > 0 ? (
+            ) : safeTrips.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {trips.map((trip) => {
+                {safeTrips.map((trip) => {
                   const duration = getDurationDays(trip.startDate, trip.endDate);
                   return (
                     <div

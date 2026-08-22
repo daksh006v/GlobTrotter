@@ -10,6 +10,7 @@ import {
   Plus,
   Luggage,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import useAuthStore from "../store/authStore";
 import useLanguageStore from "../store/languageStore";
