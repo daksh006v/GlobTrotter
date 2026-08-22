@@ -19,7 +19,6 @@ import useTripStore from "@/store/tripStore";
 import useLanguageStore from "@/store/languageStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 
 export default function MyTrips() {
   const navigate = useNavigate();
@@ -104,10 +103,11 @@ export default function MyTrips() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+<<<<<<< HEAD
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/40 pb-6">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -124,40 +124,80 @@ export default function MyTrips() {
           </div>
 
           <Button onClick={() => navigate("/trips/new")} className="gap-2 shadow-sm font-medium shrink-0 bg-sky-500 hover:bg-sky-600 text-white">
+=======
+        {/* Header Strip */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
+          <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
+                My Trips
+              </h1>
+              <span className="text-xs font-medium px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
+                {trips.length} {trips.length === 1 ? "Trip" : "Trips"}
+              </span>
+            </div>
+            <p className="text-sm sm:text-base text-slate-500 font-normal">
+              Review, edit, and organize all your upcoming and past journeys.
+            </p>
+          </div>
+
+          <Button
+            onClick={() => navigate("/trips/new")}
+            className="h-11 px-5 rounded-full bg-sky-500 hover:bg-sky-600 text-white font-medium text-sm gap-2 shadow-xs cursor-pointer shrink-0"
+          >
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             <Plus className="w-4 h-4" />
             <span>{t ? t("createNewTrip") : "Create New Trip"}</span>
           </Button>
         </div>
 
+<<<<<<< HEAD
         <div className="space-y-4">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
             <div className="relative flex-1 max-w-md">
               <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
               <Input
                 placeholder={t ? t("searchTripsPlaceholder") : "Search trips by name or keyword..."}
+=======
+        {/* Search, Filter Tabs & Sort Controls */}
+        <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs space-y-4">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            {/* Search Input */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="w-4 h-4 text-sky-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search trips by name or keyword..."
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-8"
+                className="w-full pl-10 pr-9 h-11 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition-all"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 cursor-pointer"
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <X className="w-4 h-4" />
                 </button>
               )}
             </div>
 
             <div className="flex items-center gap-2">
+<<<<<<< HEAD
               <span className="text-xs text-muted-foreground font-medium flex items-center gap-1">
                 <SlidersHorizontal className="w-3.5 h-3.5" />
                 {t ? t("filters") : "Sort"}:
+=======
+              <span className="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                <SlidersHorizontal className="w-4 h-4 text-sky-500" />
+                Sort:
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
               </span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+                className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 cursor-pointer"
               >
                 <option value="departure-asc">Departure Date (Earliest First)</option>
                 <option value="departure-desc">Departure Date (Latest First)</option>
@@ -167,7 +207,12 @@ export default function MyTrips() {
             </div>
           </div>
 
+<<<<<<< HEAD
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+=======
+          {/* Status Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto pt-1 border-t border-slate-100">
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             {[
               { id: "all", label: t ? t("allStatus") : "All Itineraries", count: counts.all },
               { id: "upcoming", label: t ? t("planned") : "Upcoming", count: counts.upcoming },
@@ -179,18 +224,30 @@ export default function MyTrips() {
                 <button
                   key={tab.id}
                   onClick={() => setStatusFilter(tab.id)}
+<<<<<<< HEAD
                   className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer ${
                     active
                       ? "bg-sky-500 text-white font-medium shadow-xs"
                       : "bg-secondary/60 text-muted-foreground hover:bg-secondary hover:text-foreground"
+=======
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer ${
+                    active
+                      ? "bg-sky-500 text-white font-medium shadow-xs"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                   }`}
                 >
                   <span>{tab.label}</span>
                   <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                    className={`text-[10px] px-2 py-0.5 rounded-full ${
                       active
+<<<<<<< HEAD
                         ? "bg-white/20 text-white"
                         : "bg-background/80 text-muted-foreground"
+=======
+                        ? "bg-white/20 text-white font-semibold"
+                        : "bg-white text-slate-600 border border-slate-200"
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                     }`}
                   >
                     {tab.count}
@@ -204,14 +261,7 @@ export default function MyTrips() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((n) => (
-              <Card key={n} className="animate-pulse border-border/40 overflow-hidden">
-                <div className="h-48 bg-muted/60" />
-                <CardContent className="p-5 space-y-3">
-                  <div className="h-5 bg-muted/80 rounded w-2/3" />
-                  <div className="h-4 bg-muted/50 rounded w-1/2" />
-                  <div className="h-8 bg-muted/40 rounded w-full mt-4" />
-                </CardContent>
-              </Card>
+              <div key={n} className="animate-pulse rounded-3xl bg-white border border-slate-200 h-64" />
             ))}
           </div>
         ) : filteredTrips.length > 0 ? (
@@ -227,6 +277,7 @@ export default function MyTrips() {
             ))}
           </div>
         ) : (
+<<<<<<< HEAD
           <Card className="border-dashed border-2 border-border/80 bg-card/40 p-12 text-center space-y-4">
             <div className="w-16 h-16 rounded-full bg-sky-50 text-sky-600 mx-auto flex items-center justify-center">
               <Plane className="w-8 h-8" />
@@ -234,15 +285,26 @@ export default function MyTrips() {
 
             <div className="max-w-md mx-auto space-y-1.5">
               <h3 className="font-semibold text-lg text-slate-900">
+=======
+          /* Empty State */
+          <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center space-y-4 shadow-sm max-w-2xl mx-auto">
+            <div className="w-16 h-16 rounded-full bg-sky-50 text-sky-600 mx-auto flex items-center justify-center">
+              <Plane className="w-8 h-8 -rotate-45" />
+            </div>
+
+            <div className="space-y-1.5">
+              <h3 className="font-semibold text-xl text-slate-900">
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                 {searchQuery || statusFilter !== "all" ? "No matching trips found" : "No trips created yet"}
               </h3>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-slate-500 leading-relaxed">
                 {searchQuery || statusFilter !== "all"
                   ? "Try adjusting your search terms or filter settings to find what you're looking for."
                   : "Start planning your next dream adventure! Add cities, discover activities, and keep track of your travel budget."}
               </p>
             </div>
 
+<<<<<<< HEAD
             {searchQuery || statusFilter !== "all" ? (
               <Button
                 variant="outline"
@@ -261,25 +323,56 @@ export default function MyTrips() {
               </Button>
             )}
           </Card>
+=======
+            <div className="pt-2">
+              {searchQuery || statusFilter !== "all" ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setStatusFilter("all");
+                  }}
+                  className="rounded-xl border-slate-200 text-slate-700 font-medium cursor-pointer"
+                >
+                  Reset Filters
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => navigate("/trips/new")}
+                  className="h-11 px-6 rounded-full bg-sky-500 hover:bg-sky-600 text-white font-medium text-sm gap-2 shadow-xs cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  Create Your First Trip
+                </Button>
+              )}
+            </div>
+          </div>
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
         )}
       </main>
 
       {tripToDelete && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-0 duration-200">
-          <div className="bg-card border border-border/80 rounded-2xl max-w-md w-full p-6 shadow-xl space-y-5">
-            <div className="flex items-center gap-3 text-destructive">
-              <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5" />
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5">
+            <div className="flex items-center gap-3 text-red-600">
+              <div className="w-10 h-10 rounded-2xl bg-red-50 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-red-600" />
               </div>
               <div>
+<<<<<<< HEAD
                 <h3 className="font-semibold text-lg text-foreground">Delete Trip</h3>
                 <p className="text-xs text-muted-foreground">This action cannot be undone</p>
+=======
+                <h3 className="font-semibold text-lg text-slate-900">Delete Trip</h3>
+                <p className="text-xs text-slate-500">This action cannot be undone</p>
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
               </div>
             </div>
 
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <p className="text-sm text-slate-600 leading-relaxed">
               Are you sure you want to permanently delete{" "}
-              <strong className="text-foreground">&ldquo;{tripToDelete.name}&rdquo;</strong>? This will remove all
+              <strong className="text-slate-900">&ldquo;{tripToDelete.name}&rdquo;</strong>? This will remove all
               associated stops, activities, and budget records.
             </p>
 
@@ -289,6 +382,7 @@ export default function MyTrips() {
                 size="sm"
                 onClick={() => setTripToDelete(null)}
                 disabled={isDeleting}
+                className="rounded-xl border-slate-200 text-slate-700 cursor-pointer"
               >
                 Cancel
               </Button>
@@ -297,7 +391,7 @@ export default function MyTrips() {
                 size="sm"
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
-                className="gap-1.5"
+                className="rounded-xl gap-1.5 cursor-pointer bg-red-600 hover:bg-red-700 text-white"
               >
                 {isDeleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>{isDeleting ? "Deleting..." : "Delete Trip"}</span>

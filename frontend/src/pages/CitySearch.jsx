@@ -924,13 +924,14 @@ export default function CitySearch() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col pb-24">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col pb-24 font-sans" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Discovery Hero */}
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-r from-primary/15 via-primary/5 to-background p-6 sm:p-10 shadow-xs">
+        {/* Discovery Hero Card */}
+        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm">
           <div className="relative z-10 max-w-3xl space-y-4">
+<<<<<<< HEAD
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-primary">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Explore Incredible India</span>
@@ -961,16 +962,54 @@ export default function CitySearch() {
                   <X className="w-4 h-4" />
                 </button>
               )}
+=======
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-medium text-sky-700">
+              <Sparkles className="w-3.5 h-3.5 text-sky-500" />
+              <span>Explore Top Destinations</span>
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900">
+              Explore & Compare Cities 🌍
+            </h1>
+
+            <p className="text-slate-500 text-base sm:text-lg leading-relaxed font-normal">
+              Discover your next destination across India and beyond. Filter by regional climate, estimated daily budget, and cultural landmarks to plan your perfect trip.
+            </p>
+
+            {/* High Contrast Prominent Search Bar */}
+            <div className="pt-2 max-w-2xl">
+              <div className="relative flex items-center bg-slate-50 hover:bg-white focus-within:bg-white border-2 border-slate-200 focus-within:border-sky-500 rounded-2xl shadow-xs transition-all">
+                <Search className="w-5 h-5 text-sky-500 absolute left-4 shrink-0 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search by city, state, vibe (e.g. 'Jaipur', 'temples', 'beaches')..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-12 h-14 bg-transparent text-base font-medium text-slate-900 placeholder:text-slate-400 border-none outline-none"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-4 text-slate-400 hover:text-slate-700 p-1 cursor-pointer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             </div>
           </div>
         </div>
 
-        {/* Filter Controls Strip */}
-        <div className="space-y-4 bg-card/60 border border-border/40 p-5 rounded-2xl backdrop-blur-xs">
-          {/* Row 1: Region Pills & Sort */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        {/* Filter Controls Toolbar */}
+        <div className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm space-y-5">
+          {/* Row 1: Region Tabs & Sort */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
             {/* Region Tabs */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-1 hidden sm:inline">
+                Region:
+              </span>
               {REGIONS.map((region) => {
                 const active = selectedRegion === region;
                 const regionLabel =
@@ -991,10 +1030,14 @@ export default function CitySearch() {
                   <button
                     key={region}
                     onClick={() => setSelectedRegion(region)}
+<<<<<<< HEAD
                     className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer ${
+=======
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all shrink-0 cursor-pointer ${
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                       active
-                        ? "bg-primary text-primary-foreground font-semibold shadow-xs"
-                        : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
+                        ? "bg-sky-500 text-white font-medium shadow-xs"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                     }`}
                   >
                     {regionLabel}
@@ -1005,14 +1048,20 @@ export default function CitySearch() {
 
             {/* Sort Dropdown */}
             <div className="flex items-center gap-2 self-end md:self-auto">
+<<<<<<< HEAD
               <span className="text-xs text-muted-foreground font-medium flex items-center gap-1">
                 <SlidersHorizontal className="w-3.5 h-3.5" />
                 {t("filters")}:
+=======
+              <span className="text-xs text-slate-500 font-medium flex items-center gap-1.5">
+                <SlidersHorizontal className="w-4 h-4 text-sky-500" />
+                Sort:
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
               </span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+                className="h-10 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 cursor-pointer"
               >
                 <option value="popularity">Popularity (High to Low)</option>
                 <option value="cost-asc">Daily Cost (Budget First)</option>
@@ -1023,17 +1072,24 @@ export default function CitySearch() {
           </div>
 
           {/* Row 2: Vibe Filter Chips */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 border-t border-border/40">
+          <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center gap-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-1 hidden sm:inline">
+              Vibes:
+            </span>
             {VIBES.map((vibe) => {
               const active = selectedVibe === vibe;
               return (
                 <button
                   key={vibe}
                   onClick={() => setSelectedVibe(vibe)}
+<<<<<<< HEAD
                   className={`px-3 py-1 rounded-lg text-xs font-medium transition-all shrink-0 cursor-pointer ${
+=======
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all shrink-0 cursor-pointer ${
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                     active
-                      ? "bg-foreground text-background font-semibold"
-                      : "bg-secondary/60 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                      ? "bg-slate-900 text-white font-medium shadow-xs"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
                   {vibe}
@@ -1043,20 +1099,31 @@ export default function CitySearch() {
           </div>
 
           {/* Row 3: Cost Level Filter */}
+<<<<<<< HEAD
           <div className="flex items-center gap-2 pt-1 border-t border-border/40 text-xs">
             <span className="text-muted-foreground font-medium flex items-center gap-1">
               <IndianRupee className="w-3.5 h-3.5" />
               {t("budgetPerDay")}:
+=======
+          <div className="pt-4 border-t border-slate-100 flex items-center gap-3 text-sm">
+            <span className="text-slate-500 font-medium flex items-center gap-1">
+              <IndianRupee className="w-4 h-4 text-sky-500" />
+              Cost Tier:
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             </span>
-            <div className="flex items-center gap-1.5 overflow-x-auto">
+            <div className="flex items-center gap-2 overflow-x-auto">
               {COST_FILTERS.map((cost) => (
                 <button
                   key={cost.value}
                   onClick={() => setSelectedCost(cost.value)}
+<<<<<<< HEAD
                   className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+=======
+                  className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                     selectedCost === cost.value
-                      ? "bg-primary/15 text-primary border border-primary/30 font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                      ? "bg-sky-50 text-sky-700 border border-sky-300 font-semibold"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
                   {cost.label}
@@ -1068,10 +1135,17 @@ export default function CitySearch() {
 
         {/* Results Header */}
         <div className="flex items-center justify-between">
+<<<<<<< HEAD
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-bold tracking-tight">{t("destinationsInIndia")}</h2>
             <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-secondary text-muted-foreground">
               {filteredCities.length} {t("matchingResults")}
+=======
+          <div className="flex items-center gap-2.5">
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Available Destinations</h2>
+            <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
+              {filteredCities.length} {filteredCities.length === 1 ? "City" : "Cities"}
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             </span>
           </div>
 
@@ -1083,7 +1157,11 @@ export default function CitySearch() {
                 setSelectedVibe("All Vibes");
                 setSelectedCost("all");
               }}
+<<<<<<< HEAD
               className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+=======
+              className="text-xs font-medium text-sky-600 hover:text-sky-700 hover:underline cursor-pointer"
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
             >
               {t("clearAll")}
             </button>
@@ -1107,14 +1185,19 @@ export default function CitySearch() {
               const displayBudget = `~₹${(city.dailyBudget || 2500).toLocaleString("en-IN")}/day`;
 
               return (
+<<<<<<< HEAD
                 <Card
                   key={city.id || city.cityName}
+=======
+                <div
+                  key={city.id}
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                   onClick={() => setActiveCityDetail(city)}
-                  className="group overflow-hidden border-border/50 bg-card hover:border-primary/40 hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between"
+                  className="group overflow-hidden rounded-3xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-lg transition-all duration-200 cursor-pointer flex flex-col justify-between"
                 >
                   <div>
                     {/* Cover Banner */}
-                    <div className="relative h-52 w-full overflow-hidden bg-muted">
+                    <div className="relative h-56 w-full overflow-hidden bg-slate-100">
                       <img
                         src={city.image}
                         alt={city.cityName}
@@ -1123,9 +1206,10 @@ export default function CitySearch() {
                           e.target.src = "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=800&auto=format&fit=crop&q=80";
                         }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
 
                       {/* Top Badges */}
+<<<<<<< HEAD
                       <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
                         <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/20">
                           {city.popularity || 92}% {t("travelerMatch")}
@@ -1144,14 +1228,33 @@ export default function CitySearch() {
                             <Heart className={`w-3.5 h-3.5 ${isWishlisted ? "fill-white" : ""}`} />
                           </button>
                         </div>
+=======
+                      <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between">
+                        <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-black/50 text-white border border-white/20">
+                          {city.popularity}% Match
+                        </span>
+
+                        <button
+                          onClick={(e) => toggleWishlist(e, city.cityName)}
+                          className={`p-2 rounded-full border transition-all cursor-pointer ${
+                            isWishlisted
+                              ? "bg-rose-500 text-white border-rose-400 scale-110 shadow-xs"
+                              : "bg-black/50 text-white border-white/20 hover:bg-black/70"
+                          }`}
+                          title={isWishlisted ? "Remove from wishlist" : "Save to wishlist"}
+                        >
+                          <Heart className={`w-3.5 h-3.5 ${isWishlisted ? "fill-white" : ""}`} />
+                        </button>
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                       </div>
 
                       {/* Bottom Banner City Identity */}
-                      <div className="absolute bottom-3 left-3 right-3 text-white space-y-0.5">
+                      <div className="absolute bottom-3.5 left-3.5 right-3.5 text-white space-y-1">
                         <div className="flex items-center justify-between">
-                          <h3 className="font-extrabold text-xl tracking-tight leading-none drop-shadow-xs">
+                          <h3 className="font-semibold text-2xl tracking-tight leading-none">
                             {city.cityName}
                           </h3>
+<<<<<<< HEAD
                           <span className={`text-xs font-bold px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-md border border-white/20 ${costTier.color}`}>
                             {displayBudget}
                           </span>
@@ -1159,13 +1262,22 @@ export default function CitySearch() {
                         <p className="text-xs text-white/80 flex items-center gap-1">
                           <MapPin className="w-3 h-3 text-primary" />
                           <span>{city.region}, India</span>
+=======
+                          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full bg-black/60 border border-white/20 ${costTier.color}`}>
+                            ~₹{city.dailyBudget}/day
+                          </span>
+                        </div>
+                        <p className="text-xs text-white/90 flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5 text-sky-400" />
+                          <span>{city.country} • {city.region}</span>
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                         </p>
                       </div>
                     </div>
 
                     {/* Body Content */}
-                    <CardContent className="p-5 space-y-3.5">
-                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                    <div className="p-5 space-y-3.5">
+                      <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
                         {city.description}
                       </p>
 
@@ -1174,7 +1286,7 @@ export default function CitySearch() {
                         {(city.vibes || ["Historic & Cultural", "Foodie"]).slice(0, 3).map((v) => (
                           <span
                             key={v}
-                            className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-secondary text-muted-foreground"
+                            className="text-[11px] font-medium px-2.5 py-0.5 rounded-lg bg-slate-100 text-slate-700"
                           >
                             {v}
                           </span>
@@ -1182,6 +1294,7 @@ export default function CitySearch() {
                       </div>
 
                       {/* Landmarks Mini-list */}
+<<<<<<< HEAD
                       {city.landmarks && city.landmarks.length > 0 && (
                         <div className="pt-2 border-t border-border/40 text-xs space-y-1">
                           <span className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider flex items-center gap-1">
@@ -1194,15 +1307,33 @@ export default function CitySearch() {
                         </div>
                       )}
                     </CardContent>
+=======
+                      <div className="pt-2 border-t border-slate-100 text-xs space-y-1">
+                        <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider flex items-center gap-1">
+                          <Landmark className="w-3.5 h-3.5 text-sky-500" />
+                          Iconic Sights:
+                        </span>
+                        <p className="text-xs font-medium text-slate-800 truncate">
+                          {city.landmarks.join(" • ")}
+                        </p>
+                      </div>
+                    </div>
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                   </div>
 
                   {/* Actions Footer */}
-                  <div className="p-5 pt-0 mt-1 flex items-center gap-2 border-t border-border/40 pt-3">
+                  <div className="p-5 pt-0 mt-1 flex items-center gap-2 border-t border-slate-100 pt-3">
                     <Button
-                      variant={isCompared ? "secondary" : "outline"}
+                      variant="outline"
                       size="sm"
                       onClick={(e) => toggleCompare(e, city)}
+<<<<<<< HEAD
                       className={`text-xs gap-1.5 shrink-0 cursor-pointer ${isCompared ? "border-primary text-primary" : ""}`}
+=======
+                      className={`text-xs gap-1.5 shrink-0 rounded-lg cursor-pointer ${
+                        isCompared ? "border-sky-500 text-sky-600 bg-sky-50" : "border-slate-200 text-slate-700"
+                      }`}
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                     >
                       <Scale className="w-3.5 h-3.5" />
                       <span>{isCompared ? t("comparing") : t("compare")}</span>
@@ -1214,26 +1345,36 @@ export default function CitySearch() {
                         e.stopPropagation();
                         navigate(`/trips/new?name=${encodeURIComponent("Explore " + city.cityName)}&city=${encodeURIComponent(city.cityName)}`);
                       }}
+<<<<<<< HEAD
                       className="flex-1 text-xs gap-1 cursor-pointer"
+=======
+                      className="flex-1 text-xs gap-1 rounded-lg bg-sky-500 hover:bg-sky-600 text-white font-medium cursor-pointer shadow-xs"
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
                     >
                       <span>{t("planTrip")}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Button>
                   </div>
-                </Card>
+                </div>
               );
             })}
           </div>
         ) : (
           /* Empty / No Match State */
-          <Card className="border-dashed border-2 border-border/80 bg-card/40 p-12 text-center space-y-4">
-            <div className="w-16 h-16 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center">
+          <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center space-y-4 shadow-sm">
+            <div className="w-16 h-16 rounded-full bg-sky-50 text-sky-600 mx-auto flex items-center justify-center">
               <Compass className="w-8 h-8" />
             </div>
             <div className="max-w-md mx-auto space-y-1.5">
+<<<<<<< HEAD
               <h3 className="font-bold text-lg">{t("noDestinationsFound")}</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {t("tryResettingFilters")}
+=======
+              <h3 className="font-semibold text-lg text-slate-900">No destinations match your filters</h3>
+              <p className="text-xs text-slate-500">
+                Try widening your cost tier, switching region tabs, or clearing your keyword search.
+>>>>>>> 3235c71 (feat(ui): enhance Explore Cities search and filters, enlarge dashboard popular destinations, and improve font hierarchy)
               </p>
             </div>
             <Button
@@ -1245,10 +1386,11 @@ export default function CitySearch() {
                 setSelectedVibe("All Vibes");
                 setSelectedCost("all");
               }}
+              className="rounded-xl border-slate-200 text-slate-700 font-medium cursor-pointer"
             >
               {t("clearAll")}
             </Button>
-          </Card>
+          </div>
         )}
       </main>
 
