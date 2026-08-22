@@ -32,7 +32,6 @@ import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -98,26 +97,23 @@ export default function Profile() {
         photoUrl: user.photoUrl || "",
       });
       setAvatarPreview(user.photoUrl || "");
-      if (user.language && user.language !== currentLang) {
-        setLanguage(user.language);
-      }
     }
-  }, [user, reset]);
+  }, [user, reset, currentLang]);
 
-  // Fetch saved destinations
+  // Load Saved Wishlist Destinations
+  const loadSavedDestinations = async () => {
+    setLoadingDestinations(true);
+    try {
+      const data = await api.get("/users/me/destinations");
+      setSavedDestinations(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to load saved destinations:", err);
+    } finally {
+      setLoadingDestinations(false);
+    }
+  };
+
   useEffect(() => {
-    const loadSavedDestinations = async () => {
-      setLoadingDestinations(true);
-      try {
-        const data = await api.get("/users/me/saved-destinations");
-        setSavedDestinations(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Failed to load saved destinations:", err);
-      } finally {
-        setLoadingDestinations(false);
-      }
-    };
-
     loadSavedDestinations();
   }, []);
 
@@ -125,40 +121,42 @@ export default function Profile() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.size > 5 * 1024 * 1024) {
+      setServerError("Photo must be smaller than 5MB");
+      return;
+    }
+
     setUploadingAvatar(true);
     setServerError("");
+
     try {
-      const res = await api.upload(file);
-      if (res?.url) {
-        setAvatarPreview(res.url);
-        setValue("photoUrl", res.url, { shouldDirty: true });
-      }
+      const uploaded = await api.upload(file);
+      const url = uploaded.url || uploaded.path;
+      setAvatarPreview(url);
+      setValue("photoUrl", url);
     } catch (err) {
-      console.error("Failed to upload avatar:", err);
-      setServerError("Failed to upload image. Please try again.");
+      console.error("Avatar upload failed:", err);
+      setServerError(err.message || "Failed to upload avatar");
     } finally {
       setUploadingAvatar(false);
     }
   };
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (formData) => {
     setServerError("");
     setSaveSuccess(false);
-    try {
-      const payload = {
-        name: values.name.trim(),
-        language: values.language,
-        photoUrl: values.photoUrl || avatarPreview || null,
-      };
 
-      const updated = await api.put("/users/me", payload);
+    try {
+      const updated = await api.put("/users/me", formData);
       updateUser(updated);
-      setLanguage(values.language);
+      if (formData.language) {
+        setLanguage(formData.language);
+      }
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (err) {
       console.error("Profile update failed:", err);
-      setServerError(err.message || "Failed to update profile settings.");
+      setServerError(err.message || "Failed to update profile");
     }
   };
 
@@ -168,10 +166,11 @@ export default function Profile() {
 
     setAddingCity(true);
     try {
-      const created = await api.post("/users/me/saved-destinations", {
+      const newDest = await api.post("/users/me/destinations", {
         cityName: newCityName.trim(),
+        country: "India",
       });
-      setSavedDestinations((prev) => [...prev, created]);
+      setSavedDestinations((prev) => [newDest, ...prev]);
       setNewCityName("");
     } catch (err) {
       console.error("Failed to add destination:", err);
@@ -182,7 +181,7 @@ export default function Profile() {
 
   const handleRemoveDestination = async (id) => {
     try {
-      await api.delete(`/users/me/saved-destinations/${id}`);
+      await api.delete(`/users/me/destinations/${id}`);
       setSavedDestinations((prev) => prev.filter((d) => d.id !== id));
     } catch (err) {
       console.error("Failed to remove destination:", err);
@@ -190,11 +189,8 @@ export default function Profile() {
   };
 
   const handleDeleteAccount = async (e) => {
-    if (e) e.preventDefault();
-    if (!deletePassword) {
-      setDeleteModalError("Please enter your current password to confirm deletion.");
-      return;
-    }
+    e.preventDefault();
+    if (!deletePassword.trim()) return;
 
     setIsDeletingAccount(true);
     setDeleteModalError("");
@@ -212,200 +208,205 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       <Navbar />
 
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-24">
         {/* Header Strip */}
-        <div className="border-b border-border/40 pb-6">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">{t("profileTitle")}</h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            {t("profileSubtitle")}
+        <div className="border-b border-slate-200 pb-6 space-y-1">
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-900">{t ? t("profileTitle") : "Account & Profile"}</h1>
+          <p className="text-sm text-slate-500 font-normal">
+            {t ? t("profileSubtitle") : "Manage your traveler identity, avatar, and preferred destinations."}
           </p>
         </div>
 
         {serverError && (
-          <div className="rounded-xl border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-            {serverError}
+          <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700 flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 shrink-0 text-red-600" />
+            <span>{serverError}</span>
           </div>
         )}
 
         {saveSuccess && (
-          <div className="rounded-xl border border-emerald-500/50 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
-            <Check className="w-4 h-4" />
-            <span>{t("profileUpdated")}</span>
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-700 flex items-center gap-3">
+            <Check className="w-5 h-5 text-emerald-600" />
+            <span>{t ? t("profileUpdated") : "Profile updated successfully!"}</span>
           </div>
         )}
 
         {/* Profile Card & Edit Form */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* User Quick Info Summary */}
-          <Card className="border-border/50 h-fit">
-            <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
-              {/* Avatar with Upload Badge */}
-              <div className="relative group">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-primary/30 bg-muted shadow-sm flex items-center justify-center">
-                  {avatarPreview ? (
-                    <img
-                      src={avatarPreview}
-                      alt={user?.name || "Profile"}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-primary/10 text-primary font-bold text-3xl flex items-center justify-center">
-                      {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
-                    </div>
-                  )}
-                </div>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xs flex flex-col items-center text-center space-y-4 h-fit">
+            {/* Avatar with Upload Badge */}
+            <div className="relative group">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-sky-200 bg-slate-100 shadow-sm flex items-center justify-center">
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt={user?.name || "Profile"}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-sky-50 text-sky-600 font-bold text-3xl flex items-center justify-center">
+                    {user?.name ? user.name.charAt(0).toUpperCase() : "D"}
+                  </div>
+                )}
+              </div>
 
-                <label
-                  htmlFor="avatar-file"
-                  className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center cursor-pointer shadow-md hover:bg-primary/90 transition-colors"
-                  title="Upload profile photo"
-                >
-                  {uploadingAvatar ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Camera className="w-4 h-4" />
-                  )}
-                </label>
-                <input
-                  id="avatar-file"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarFileChange}
-                  className="hidden"
-                  disabled={uploadingAvatar}
+              <label
+                htmlFor="avatar-file"
+                className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-sky-500 text-white flex items-center justify-center cursor-pointer shadow-md hover:bg-sky-600 transition-colors"
+                title="Upload profile photo"
+              >
+                {uploadingAvatar ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Camera className="w-4 h-4" />
+                )}
+              </label>
+              <input
+                id="avatar-file"
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarFileChange}
+                className="hidden"
+                disabled={uploadingAvatar}
+              />
+            </div>
+
+            <div className="space-y-1">
+              <h3 className="font-semibold text-xl text-slate-900">{user?.name || "Daksh"}</h3>
+              <p className="text-xs text-slate-500">{user?.email}</p>
+              <div className="pt-2 flex items-center justify-center gap-2">
+                <span className="text-xs font-medium px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
+                  {user?.isAdmin ? "Administrator" : "GlobeTrotter"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Profile Form */}
+          <div className="lg:col-span-2 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
+            <div className="border-b border-slate-100 pb-4">
+              <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+                <User className="w-5 h-5 text-sky-500" />
+                {t ? t("personalInfo") : "Personal Information"}
+              </h2>
+              <p className="text-xs text-slate-500 mt-1">{t ? t("personalInfoDesc") : "Update your profile details and settings."}</p>
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+              {/* Name */}
+              <div className="space-y-1.5">
+                <Label htmlFor="name" className="text-xs font-semibold text-slate-700">{t ? t("fullName") : "Full Name"} *</Label>
+                <Input
+                  id="name"
+                  placeholder={t ? t("fullNamePlaceholder") : "Your Full Name"}
+                  {...register("name")}
+                  className={`h-11 rounded-xl bg-slate-50 border-slate-200 text-sm font-medium ${errors.name ? "border-red-500" : ""}`}
+                />
+                {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+              </div>
+
+              {/* Email */}
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-xs font-semibold text-slate-700 flex items-center justify-between">
+                  <span>{t ? t("emailAddress") : "Email Address"}</span>
+                  <span className="text-[11px] text-slate-400 font-normal">{t ? t("registeredAccount") : "Registered account"}</span>
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  {...register("email")}
+                  disabled
+                  className="h-11 rounded-xl bg-slate-100 border-slate-200 text-sm font-medium cursor-not-allowed opacity-80"
                 />
               </div>
 
-              <div className="space-y-1">
-                <h3 className="font-bold text-lg">{user?.name || "Travel Enthusiast"}</h3>
-                <p className="text-xs text-muted-foreground">{user?.email}</p>
-                <div className="pt-2 flex items-center justify-center gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                    {user?.isAdmin ? "Administrator" : "GlobeTrotter"}
-                  </span>
-                  <span className="text-[10px] font-medium text-muted-foreground px-2 py-0.5 rounded-full bg-secondary">
-                    {t("member")}
-                  </span>
-                </div>
+              {/* Language */}
+              <div className="space-y-1.5">
+                <Label htmlFor="language" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Languages className="w-3.5 h-3.5 text-sky-500" />
+                  {t ? t("preferredLanguage") : "Preferred Language"}
+                </Label>
+                <select
+                  id="language"
+                  {...register("language")}
+                  className="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-800 outline-none focus:ring-2 focus:ring-sky-500 cursor-pointer"
+                >
+                  {LANGUAGES_LIST.map((lang) => (
+                    <option key={lang.code} value={lang.code}>
+                      {lang.name}
+                    </option>
+                  ))}
+                </select>
               </div>
-            </CardContent>
-          </Card>
 
-          {/* Profile Form */}
-          <Card className="lg:col-span-2 border-border/50 shadow-xs">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <User className="w-5 h-5 text-primary" />
-                {t("personalInfo")}
-              </CardTitle>
-              <CardDescription>{t("personalInfoDesc")}</CardDescription>
-            </CardHeader>
+              {/* Photo URL */}
+              <div className="space-y-1.5">
+                <Label htmlFor="photoUrl" className="text-xs font-semibold text-slate-700">Avatar Photo URL</Label>
+                <Input
+                  id="photoUrl"
+                  placeholder="https://images.unsplash.com/..."
+                  {...register("photoUrl")}
+                  onChange={(e) => setAvatarPreview(e.target.value)}
+                  className="h-11 rounded-xl bg-slate-50 border-slate-200 text-sm font-medium"
+                />
+                <p className="text-[11px] text-slate-400">
+                  Direct image link or upload using the camera button on avatar.
+                </p>
+              </div>
 
-            <CardContent>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                {/* Name */}
-                <div className="space-y-2">
-                  <Label htmlFor="name">{t("fullName")} *</Label>
-                  <Input
-                    id="name"
-                    placeholder={t("fullNamePlaceholder")}
-                    {...register("name")}
-                    className={errors.name ? "border-destructive" : ""}
-                  />
-                  {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
-                </div>
-
-                {/* Email (Read Only or Informational) */}
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="flex items-center justify-between">
-                    <span>{t("emailAddress")}</span>
-                    <span className="text-[11px] text-muted-foreground font-normal">{t("registeredAccount")}</span>
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    {...register("email")}
-                    disabled
-                    className="bg-muted/40 cursor-not-allowed opacity-80"
-                  />
-                </div>
-
-                {/* Language Preference */}
-                <div className="space-y-2">
-                  <Label htmlFor="language" className="flex items-center gap-1.5">
-                    <Languages className="w-3.5 h-3.5 text-primary" />
-                    {t("preferredLanguage")}
-                  </Label>
-                  <select
-                    id="language"
-                    {...register("language")}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
-                  >
-                    {LANGUAGES_LIST.map((lang) => (
-                      <option key={lang.code} value={lang.code}>
-                        {lang.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Photo URL (Direct input option) */}
-                <div className="space-y-2">
-                  <Label htmlFor="photoUrl">Avatar Photo URL</Label>
-                  <Input
-                    id="photoUrl"
-                    placeholder="https://images.pexels.com/..."
-                    {...register("photoUrl")}
-                    onChange={(e) => setAvatarPreview(e.target.value)}
-                  />
-                  <p className="text-[11px] text-muted-foreground">
-                    Direct image link, or use the camera icon on the avatar card to upload.
-                  </p>
-                </div>
-
-                {/* Save Button */}
-                <div className="flex items-center justify-end pt-3 border-t border-border/40">
-                  <Button type="submit" disabled={isSubmitting} className="gap-2 px-6">
-                    {isSubmitting ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Save className="w-4 h-4" />
-                    )}
-                    <span>{isSubmitting ? t("saving") : t("saveChanges")}</span>
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+              {/* Save Button */}
+              <div className="flex items-center justify-end pt-3 border-t border-slate-100">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="h-11 px-6 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-medium text-sm gap-2 shadow-xs cursor-pointer"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Save className="w-4 h-4" />
+                  )}
+                  <span>{isSubmitting ? (t ? t("saving") : "Saving...") : (t ? t("saveChanges") : "Save Changes")}</span>
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
 
         {/* Saved Wishlist Destinations */}
-        <Card className="border-border/50 shadow-xs">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-emerald-500" />
-              {t("savedWishlist")}
-            </CardTitle>
-            <CardDescription>
-              {t("savedWishlistDesc")}
-            </CardDescription>
-          </CardHeader>
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="border-b border-slate-100 pb-4">
+            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-sky-500" />
+              {t ? t("savedWishlist") : "Wishlist & Saved Destinations"}
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              {t ? t("savedWishlistDesc") : "Quickly access saved destinations to plan upcoming itineraries."}
+            </p>
+          </div>
 
-          <CardContent className="space-y-5">
-            {/* Add Destination Input Form */}
+          <div className="space-y-5">
+            {/* Add Destination Form */}
             <form onSubmit={handleAddDestination} className="flex gap-2 max-w-md">
               <Input
-                placeholder={t("addCityPlaceholder")}
+                placeholder={t ? t("addCityPlaceholder") : "Add a city (e.g. Udaipur, Munnar)..."}
                 value={newCityName}
                 onChange={(e) => setNewCityName(e.target.value)}
                 disabled={addingCity}
+                className="h-11 rounded-xl bg-slate-50 border-slate-200 text-sm font-medium"
               />
-              <Button type="submit" size="sm" disabled={addingCity || !newCityName.trim()} className="gap-1.5 shrink-0">
+              <Button
+                type="submit"
+                size="sm"
+                disabled={addingCity || !newCityName.trim()}
+                className="h-11 px-5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-medium text-xs gap-1.5 shrink-0 shadow-xs cursor-pointer"
+              >
                 {addingCity ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
-                <span>{t("addCityButton")}</span>
+                <span>{t ? t("addCityButton") : "Add City"}</span>
               </Button>
             </form>
 
@@ -413,7 +414,7 @@ export default function Profile() {
             {loadingDestinations ? (
               <div className="flex gap-2 animate-pulse py-2">
                 {[1, 2, 3].map((n) => (
-                  <div key={n} className="h-8 w-24 bg-muted/60 rounded-full" />
+                  <div key={n} className="h-9 w-28 bg-slate-100 rounded-full" />
                 ))}
               </div>
             ) : savedDestinations.length > 0 ? (
@@ -421,12 +422,11 @@ export default function Profile() {
                 {savedDestinations.map((dest) => (
                   <div
                     key={dest.id}
-                    className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-secondary/80 border border-border/80 text-xs font-medium group hover:border-primary/40 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 border border-slate-200 text-xs font-medium group hover:border-sky-300 transition-colors"
                   >
-                    <MapPin className="w-3.5 h-3.5 text-primary" />
-                    <span>{dest.cityName}</span>
+                    <MapPin className="w-3.5 h-3.5 text-sky-500" />
+                    <span className="text-slate-800">{dest.cityName}</span>
 
-                    {/* Shortcut to plan trip */}
                     <button
                       type="button"
                       onClick={() =>
@@ -436,17 +436,16 @@ export default function Profile() {
                           )}`
                         )
                       }
-                      className="text-[10px] text-primary hover:underline font-semibold ml-1"
+                      className="text-[11px] text-sky-600 hover:text-sky-700 font-semibold ml-1 cursor-pointer"
                       title="Plan a trip to this city"
                     >
                       Plan →
                     </button>
 
-                    {/* Delete button */}
                     <button
                       type="button"
                       onClick={() => handleRemoveDestination(dest.id)}
-                      className="text-muted-foreground hover:text-destructive transition-colors ml-0.5"
+                      className="text-slate-400 hover:text-red-600 transition-colors ml-0.5 cursor-pointer"
                       title="Remove from saved wishlist"
                     >
                       <Trash2 className="w-3 h-3" />
@@ -455,76 +454,76 @@ export default function Profile() {
                 ))}
               </div>
             ) : (
-              <div className="p-6 text-center border border-dashed border-border/80 rounded-xl bg-card/40 space-y-1.5">
-                <Compass className="w-6 h-6 text-muted-foreground mx-auto" />
-                <p className="text-xs font-medium">{t("noSavedWishlist")}</p>
-                <p className="text-[11px] text-muted-foreground">
-                  {t("noSavedWishlistHint")}
+              <div className="p-6 text-center border border-dashed border-slate-200 rounded-2xl bg-slate-50 space-y-1.5">
+                <Compass className="w-6 h-6 text-slate-400 mx-auto" />
+                <p className="text-xs font-medium text-slate-600">{t ? t("noSavedWishlist") : "No saved destinations yet"}</p>
+                <p className="text-[11px] text-slate-400">
+                  {t ? t("noSavedWishlistHint") : "Bookmark cities on the Explore page or add them above."}
                 </p>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Danger Zone */}
-        <Card className="border-destructive/30 bg-destructive/5 shadow-xs">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base text-destructive flex items-center gap-2">
+        <div className="rounded-3xl border border-red-200 bg-red-50/50 p-6 sm:p-8 shadow-xs space-y-4">
+          <div className="space-y-1">
+            <h3 className="text-base font-semibold text-red-600 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4" />
-              {t("dangerZone")}
-            </CardTitle>
-            <CardDescription className="text-xs">
-              {t("dangerZoneDesc")}
-            </CardDescription>
-          </CardHeader>
+              {t ? t("dangerZone") : "Danger Zone"}
+            </h3>
+            <p className="text-xs text-slate-500">
+              {t ? t("dangerZoneDesc") : "Permanently remove your account and all associated itineraries."}
+            </p>
+          </div>
 
-          <CardContent className="flex items-center justify-between pt-1">
-            <p className="text-xs text-muted-foreground max-w-lg">
-              {t("dangerZoneWarning")}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+            <p className="text-xs text-slate-600 max-w-lg leading-relaxed">
+              {t ? t("dangerZoneWarning") : "Once deleted, your profile data, trips, and saved activities cannot be recovered."}
             </p>
 
             <Button
               variant="destructive"
               size="sm"
               onClick={openDeleteModal}
-              className="shrink-0"
+              className="h-10 px-5 rounded-xl font-medium text-xs shrink-0 cursor-pointer bg-red-600 hover:bg-red-700 text-white shadow-xs"
             >
-              {t("deleteAccount")}
+              {t ? t("deleteAccount") : "Delete Account"}
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </main>
 
       {/* Delete Account Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in-0 duration-200">
-          <div className="bg-card border border-border/80 rounded-2xl max-w-md w-full p-6 shadow-xl space-y-5">
-            <div className="flex items-center gap-3 text-destructive">
-              <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center shrink-0">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5">
+            <div className="flex items-center gap-3 text-red-600">
+              <div className="w-10 h-10 rounded-2xl bg-red-50 flex items-center justify-center shrink-0">
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-bold text-lg text-foreground">{t("deleteModalTitle")}</h3>
-                <p className="text-xs text-muted-foreground">{t("deleteModalSubtitle")}</p>
+                <h3 className="font-semibold text-lg text-slate-900">{t ? t("deleteModalTitle") : "Delete Account"}</h3>
+                <p className="text-xs text-slate-500">{t ? t("deleteModalSubtitle") : "This action cannot be undone"}</p>
               </div>
             </div>
 
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              {t("deleteModalDesc")}
+            <p className="text-xs text-slate-600 leading-relaxed">
+              {t ? t("deleteModalDesc") : "Please enter your password to confirm permanent account deletion."}
             </p>
 
             {deleteModalError && (
-              <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-3 py-2 text-xs text-destructive flex items-center gap-2">
-                <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs text-red-700 flex items-center gap-2">
+                <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-red-600" />
                 <span>{deleteModalError}</span>
               </div>
             )}
 
             <form onSubmit={handleDeleteAccount} className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="delete-password-input" className="text-xs font-semibold flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-muted-foreground" />
-                  <span>{t("currentPassword")}</span>
+                <Label htmlFor="delete-password-input" className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-slate-400" />
+                  <span>{t ? t("currentPassword") : "Password"}</span>
                 </Label>
                 <div className="relative">
                   <Input
@@ -535,15 +534,15 @@ export default function Profile() {
                       setDeletePassword(e.target.value);
                       if (deleteModalError) setDeleteModalError("");
                     }}
-                    placeholder={t("passwordPlaceholder")}
-                    className="pr-10 text-xs h-9"
+                    placeholder={t ? t("passwordPlaceholder") : "Enter your password"}
+                    className="pr-10 text-xs h-10 rounded-xl bg-slate-50 border-slate-200"
                     autoFocus
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowDeletePassword(!showDeletePassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors"
                   >
                     {showDeletePassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -557,18 +556,19 @@ export default function Profile() {
                   size="sm"
                   onClick={() => setShowDeleteModal(false)}
                   disabled={isDeletingAccount}
+                  className="rounded-xl border-slate-200 text-slate-700 cursor-pointer"
                 >
-                  {t("cancel")}
+                  {t ? t("cancel") : "Cancel"}
                 </Button>
                 <Button
                   type="submit"
                   variant="destructive"
                   size="sm"
                   disabled={isDeletingAccount || !deletePassword.trim()}
-                  className="gap-1.5"
+                  className="rounded-xl gap-1.5 cursor-pointer bg-red-600 hover:bg-red-700 text-white"
                 >
                   {isDeletingAccount && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                  <span>{isDeletingAccount ? t("deleting") : t("confirmDelete")}</span>
+                  <span>{isDeletingAccount ? (t ? t("deleting") : "Deleting...") : (t ? t("confirmDelete") : "Confirm Delete")}</span>
                 </Button>
               </div>
             </form>

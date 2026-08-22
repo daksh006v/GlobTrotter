@@ -43,14 +43,21 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/trips" element={<MyTrips />} />
           <Route path="/trips/new" element={<CreateTrip />} />
+          <Route path="/trips/create" element={<CreateTrip />} />
           <Route path="/trips/:id" element={<ItineraryView />} />
+          <Route path="/trips/:id/view" element={<ItineraryView />} />
           <Route path="/trips/:id/edit" element={<ItineraryBuilder />} />
+          <Route path="/trips/:id/itinerary" element={<ItineraryBuilder />} />
           <Route path="/trips/:id/budget" element={<Budget />} />
           <Route path="/trips/:id/timeline" element={<Timeline />} />
+          <Route path="/trips/:id/share" element={<PublicShare />} />
           <Route path="/cities" element={<CitySearch />} />
+          <Route path="/cities/search" element={<CitySearch />} />
           <Route path="/activities" element={<ActivitySearch />} />
+          <Route path="/activities/search" element={<ActivitySearch />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/analytics" element={<AdminDashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>

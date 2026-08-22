@@ -21,7 +21,7 @@ export default function ActivityCard({ activity, onEdit, onRemove, onQuickView, 
         <div className="flex-1 min-w-0">
           <div className="text-sm font-medium text-foreground truncate">{name}</div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
-            <span>${cost}</span>
+            <span>₹{cost}</span>
             {duration > 0 && <span>• {duration >= 60 ? `${Math.floor(duration / 60)}h ${duration % 60 ? (duration % 60) + "m" : ""}` : `${duration}m`}</span>}
           </div>
         </div>
